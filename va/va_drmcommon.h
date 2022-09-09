@@ -28,7 +28,7 @@
 #define VA_DRM_COMMON_H
 
 #include <stdint.h>
-
+#include <stdbool.h>
 
 /** \brief DRM authentication type. */
 enum {
@@ -86,6 +86,11 @@ struct drm_state {
  * Used with VADRMPRIMESurfaceDescriptor.
  */
 #define VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2      0x40000000
+/** \brief DRM PRIME memory type for protected buffeers
+ *
+ * Used with VADRMPRIME3SurfaceDescriptor.
+ */
+#define VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_3      0x80000000
 
 /**
  * \brief External buffer descriptor for a DRM PRIME surface.
@@ -158,6 +163,25 @@ typedef struct _VADRMPRIMESurfaceDescriptor {
     } layers[4];
 } VADRMPRIMESurfaceDescriptor;
 
+/**
+ * \brief External buffer descriptor for a DRM PRIME surface with protected flag
+ *
+ * The structure VADRMPRIMESurfaceDescriptor has the same behavior as if used
+ * with VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2.
+ * Refer to VADRMPRIMESurfaceDescriptor for more details on it's usage.
+ *
+ * The flag is_protected will indicte that the surface is to be protected if
+ * set to true and unprotected if false.
+ */
+typedef struct _VADRMPRIME3SurfaceDescriptor {
+    VADRMPRIMESurfaceDescriptor drmPrimeSurfaceDescriptor;
+
+    /** \brief indicates if buffer is protected */
+    bool is_protected;
+
+    /** \brief Reserved bytes for future use, must be zero */
+    int         va_reserved[8];
+} VADRMPRIME3SurfaceDescriptor;
 /**
  * \brief List of DRM format modifiers.
  *
